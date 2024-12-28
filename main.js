@@ -1,35 +1,37 @@
-const path = require('node:path');
-const fs = require('node:fs/promises');
+const express = require('express')
+const dotenv = require('dotenv')
+dotenv.config({ path: '.env' })
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
-const foo = async () => {
-    const pathToFile = path.join(__dirname, 'baseFolder');
-    await fs.mkdir(pathToFile, { recursive: true });
 
-    const folders = ['folder1', 'folder2', 'folder3', 'folder4', 'folder5'];
-    const files = ['file1.txt', 'file2.txt' , 'file3.txt' , 'file4.txt' , 'file5.txt'];
-
-    await Promise.all(folders.map(async (folder) => {
-        const folderPath = path.join(pathToFile, folder);
-        await fs.mkdir(folderPath, { recursive: true });
-
-        await Promise.all(files.map(async (file) => {
-            await fs.writeFile(path.join(folderPath, file), 'Hello Word');
-        }));
-    }));
-
-    const data = await fs.readdir(pathToFile);
-    for (const folder of data) {
-        const folderPath = path.join(pathToFile, folder);
-        const files = await fs.readdir(folderPath);
-        const stat = await fs.stat(folderPath);
-        console.log(`file: ${folderPath} - Is File: ${stat.isFile()}`);
-
-        for (const file of files) {
-            const filePath = path.join(folderPath, file);
-            const stat = await fs.stat(filePath);
-            console.log(`file: ${filePath} - Is File: ${stat.isFile()}`);
-        }
+app.get('/users', (req, res) => {
+    res.json(users);
+});
+app.post('/users', (req, res) => {
+    const newUser = {
+        id: users.length + 1,
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
     }
+    users.push(newUser)
+    res.status(201).json(newUser);
+});
+app.get('/users/:userId', (req, res) => {
+    console.log('params:',req.params);
+    console.log('query:',req.query);
+    console.log('body:',req.body);
+    const user = users.find(user=> user.id === +req.params.userId);
+    res.json(user);
+});
+app.delete('/users/:userId', (req, res) => {
+    users = users.filter(user => user.id !== Number(req.params.userId));
+    res.sendStatus(204);
+});
 
-}
-void foo();
+const port = process.env.PORT;
+app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+})
