@@ -87,10 +87,7 @@
     "password": "qwe123"
   },
   {
-    "id": 19,
-    "name": "Maks 51",
-    "email": "test@te.com",
-    "password": "qwe123"
+    "id": 19
   },
   {
     "id": 20,
@@ -113,6 +110,18 @@
   {
     "id": 24,
     "name": "Maks 93",
+    "email": "test@te.com",
+    "password": "qwe123wds"
+  },
+  {
+    "id": 25,
+    "name": "Maks 67",
+    "email": "test@te.com",
+    "password": "qwe123wds"
+  },
+  {
+    "id": 26,
+    "name": "Maks 77",
     "email": "test@te.com",
     "password": "qwe123wds"
   }
