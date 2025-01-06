@@ -109,5 +109,11 @@
     "name": "Maks 63",
     "email": "test@te.com",
     "password": "qwe123wds"
+  },
+  {
+    "id": 24,
+    "name": "Maks 93",
+    "email": "test@te.com",
+    "password": "qwe123wds"
   }
 ]
