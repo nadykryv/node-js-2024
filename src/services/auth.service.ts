@@ -2,10 +2,11 @@ import { ApiError } from "../errors/api-error";
 import { IUser, IUserCreateDto } from "../interfaces/user.interface";
 import { userRepository } from "../repositories/user.repository";
 import { passwordService } from "./password.service";
+import { tokenService } from "./token.service";
 import { userService } from "./user.service";
 
 class AuthService {
-  public async singUp(dto: IUserCreateDto): Promise<IUser> {
+  public async signUp(dto: IUserCreateDto): Promise<IUser> {
     await userService.isEmailUnique(dto.email);
     const password = await passwordService.hashPassword(dto.password);
     return await userRepository.create({ ...dto, password });
@@ -20,6 +21,8 @@ class AuthService {
     if (!isPasswordCorrect) {
       throw new ApiError("incorrect email or password", 401);
     }
+    const tokens = tokenService.generateTokens({ userId: user._id });
+    console.log(tokens);
   }
 }
 
