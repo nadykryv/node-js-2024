@@ -1,21 +1,10 @@
 import { ApiError } from "../errors/api-error";
-import {
-  IUser,
-  IUserCreateDto,
-  IUserUpdateDto,
-} from "../interfaces/user.interface";
+import { IUser, IUserUpdateDto } from "../interfaces/user.interface";
 import { userRepository } from "../repositories/user.repository";
-import { passwordService } from "./password.service";
 
 class UserService {
   public async getList(): Promise<IUser[]> {
     return await userRepository.getList();
-  }
-
-  public async create(dto: IUserCreateDto): Promise<IUser> {
-    await this.isEmailUnique(dto.email);
-    const password = await passwordService.hashPassword(dto.password);
-    return await userRepository.create({ ...dto, password });
   }
 
   public async getUserById(userId: string): Promise<IUser> {
@@ -41,7 +30,7 @@ class UserService {
     }
     await userRepository.deleteById(userId);
   }
-  private async isEmailUnique(email: string): Promise<void> {
+  public async isEmailUnique(email: string): Promise<void> {
     const user = await userRepository.getByEmail(email);
     if (user) {
       throw new ApiError("Email is already in use", 409);
